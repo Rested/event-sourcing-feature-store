@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Fleet Status for {{ aggregate_id }}</title>
+</head>
+
+<body>
+    <h1>Fleet Status for {{ aggregate_id }}</h1>
+    <h2>Taxis</h2>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>License Plate</th>
+            <th>Model</th>
+            <th>Status</th>
+            <th>Driver ID</th>
+        </tr>
+        {% for taxi_id, taxi in fleet_status.taxis.items() %}
+        <tr>
+            <td>{{ taxi_id }}</td>
+            <td>{{ taxi.license_plate }}</td>
+            <td>{{ taxi.model }}</td>
+            <td>{{ taxi.status }}</td>
+            <td>{{ taxi.driver_id }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h2>Drivers</h2>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Taxi ID</th>
+        </tr>
+        {% for driver_id, driver in fleet_status.drivers.items() %}
+        <tr>
+            <td>{{ driver_id }}</td>
+            <td>{{ driver.name }}</td>
+            <td>{{ driver.taxi_id }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h2>Add a Taxi</h2>
+    <form id="add-taxi-form" method="post" action="/events/{{ aggregate_id }}/TaxiAddedToFleet">
+        <label for="taxi_id">Taxi ID:</label>
+        <input type="text" id="taxi_id" name="taxi_id" required>
+        <label for="license_plate">License Plate:</label>
+        <input type="text" id="license_plate" name="license_plate" required>
+        <label for="model">Model:</label>
+        <input type="text" id="model" name="model" required>
+        <button type="submit">Add Taxi</button>
+    </form>
+    <h2>Add a Driver</h2>
+    <form id="add-driver-form" method="post" action="/events/{{ aggregate_id }}/DriverJoinedFleet">
+        <label for="driver_id">Driver ID:</label>
+        <input type="text" id="driver_id" name="driver_id" required>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <label for="years_experience">Years Experience:</label>
+        <input type="number" id="years_experience" name="years_experience" required>
+        <button type="submit">Add Driver</button>
+    </form>
+    <h2>Assign a Driver to a Taxi</h2>
+    <form id="assign-driver-form" method="post" action="/events/{{ aggregate_id }}/DriverAssignedTaxi">
+        <label for="driver_id_assign">Driver ID:</label>
+        <input type="text" id="driver_id_assign" name="driver_id" required>
+        <label for="taxi_id_assign">Taxi ID:</label>
+        <input type="text" id="taxi_id_assign" name="taxi_id" required>
+        <button type="submit">Assign Driver</button>
+    </form>
+    <h2>Send Taxi for Maintenance</h2>
+    <form id="send-maintenance-form" method="post" action="/events/{{ aggregate_id }}/TaxiSentForMaintenance">
+        <label for="taxi_id_maintenance">Taxi ID:</label>
+        <input type="text" id="taxi_id_maintenance" name="taxi_id" required>
+        <button type="submit">Send for Maintenance</button>
+    </form>
+</body>
+
+</html>
